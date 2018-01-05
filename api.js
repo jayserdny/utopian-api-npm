@@ -107,7 +107,7 @@ utopian.getPendingPostsByModerator = (moderator) => {
             moderator: moderator,
             type: 'all'
         }).then((posts) => {
-            yes(JSON.parse(posts));
+            yes(posts);
         })
     })
 }
