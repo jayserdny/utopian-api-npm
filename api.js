@@ -12,7 +12,7 @@ utopian.getModerators = () => {
     return new Promise((yes, no) => {
         request(ENDPOINT_MODERATORS, [], (err, response, body) => {
             if (err) no(err);
-            yes(body);
+            yes(JSON.parse(body));
         })
     });
 };
@@ -20,14 +20,14 @@ utopian.getSponsors = () => {
     return new Promise((yes, no) => {
         request(ENDPOINT_SPONSORS, [], (err, response, body) => {
             if (err) no(err);
-            yes(body);
+            yes(JSON.parse(body));
         })
     });
 };
 utopian.getModerator = (username) => {
     return new Promise((yes, no) => {
         utopian.getModerators().then((moderators) => {
-            yes(filter(JSON.parse(moderators).results, (moderator) => {
+            yes(filter(moderators.results, (moderator) => {
                 if (moderator.account === username && moderator.banned === false && moderator.reviewed === true) {
                     return moderator
                 } else {
@@ -40,7 +40,7 @@ utopian.getModerator = (username) => {
 utopian.getSponsor = (username) => {
     return new Promise((yes, no) => {
         utopian.getSponsors().then((sponsors) => {
-            yes(filter(JSON.parse(sponsors).results, (sponsor) => {
+            yes(filter(sponsors.results, (sponsor) => {
                 if (sponsor.account === username) {
                     return sponsor
                 } else {
@@ -67,7 +67,7 @@ utopian.getPosts = (options) => {
     return new Promise((yes, no) => {
         request(ENDPOINT_POSTS + "?" + query(options), [], (err, response, body) => {
             if (err) no(err);
-            yes(body);
+            yes(JSON.parse(body));
         })
     });
 
@@ -76,7 +76,7 @@ utopian.getPosts = (options) => {
 utopian.getPendingPosts = (options) => {
   return new Promise((yes) => {
       utopian.getPosts(Object.assign(options, options)).then((posts) => {
-          yes(posts);
+          yes(JSON.parse(posts));
       })
   })
 };
@@ -107,7 +107,7 @@ utopian.getPendingPostsByModerator = (moderator) => {
             moderator: moderator,
             type: 'all'
         }).then((posts) => {
-            yes(posts);
+            yes(JSON.parse(posts));
         })
     })
 }
