@@ -24,7 +24,7 @@ utopian.getSponsors = () => {
         })
     });
 };
-utopian.getSponsor = (username) => {
+utopian.getModerator = (username) => {
     return new Promise((yes, no) => {
         utopian.getModerators().then((moderators) => {
             yes(filter(JSON.parse(moderators).results, (moderator) => {
