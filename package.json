@@ -1,0 +1,26 @@
+{
+  "name": "utopian-api",
+  "version": "0.1.0",
+  "description": "Wrapper for the Utopian.io API",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wehmoen/utopian-api-npm.git"
+  },
+  "keywords": [
+    "utopian"
+  ],
+  "author": "wehmoen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wehmoen/utopian-api-npm/issues"
+  },
+  "homepage": "https://github.com/wehmoen/utopian-api-npm#readme",
+  "dependencies": {
+    "array-filter": "^1.0.0",
+    "request": "^2.83.0"
+  }
+}
