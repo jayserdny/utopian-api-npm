@@ -1,6 +1,6 @@
 {
   "name": "utopian-api",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Wrapper for the Utopian.io API",
   "main": "api.js",
   "scripts": {
