@@ -97,6 +97,21 @@ utopian.getPendingPostsByModeratorAndCategory = (moderator, category, options) =
   })
 };
 
+utopian.getPendingPostsByModerator = (moderator) => {
+    return new Promise((yes) => {
+        utopian.getPosts({
+            section: 'all',
+            sortBy: 'created',
+            filterBy: 'review',
+            status: 'pending',
+            moderator: moderator,
+            type: 'all'
+        }).then((posts) => {
+            yes(posts);
+        })
+    })
+}
+
 utopian.getPendingPostsCount = () => {
     return new Promise((yes, no) => {
         request(ENDPOINT_POSTS + "?" + query({filterBy: 'review', limit: 1, skip: 0}), [], (err, response, body) => {
