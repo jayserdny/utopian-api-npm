@@ -73,6 +73,30 @@ utopian.getPosts = (options) => {
 
 };
 
+utopian.getPendingPosts = (options) => {
+  return new Promise((yes) => {
+      utopian.getPosts(Object.assign(options, options)).then((posts) => {
+          yes(posts);
+      })
+  })
+};
+
+utopian.getPendingPostsByModeratorAndCategory = (moderator, category, options) => {
+  return new Promise((yes) => {
+      utopian.getPosts(Object.assign({
+          section: 'all',
+          sortBy: 'created',
+          filterBy: 'review',
+          status: 'any',
+          type: category
+      }, options)).then((posts) => {
+          yes(filter(JSON.parse(posts).results,(post) => {
+              return post.moderator === moderator;
+          }));
+      })
+  })
+};
+
 utopian.getPendingPostsCount = () => {
     return new Promise((yes, no) => {
         request(ENDPOINT_POSTS + "?" + query({filterBy: 'review', limit: 1, skip: 0}), [], (err, response, body) => {
@@ -85,14 +109,6 @@ utopian.getPendingPostsCount = () => {
 utopian.getTotalPostCount = () => {
     return new Promise((yes, no) => {
         request(ENDPOINT_POSTS + "?" + query({limit: 1, skip: 0}), [], (err, response, body) => {
-            if (err) no(err);
-            yes(JSON.parse(body).total);
-        })
-    });
-};
-utopian.getApprovedPostCount = () => {
-    return new Promise((yes, no) => {
-        request(ENDPOINT_POSTS + "?" + query({filterBy: 'active', limit: 1, skip: 0}), [], (err, response, body) => {
             if (err) no(err);
             yes(JSON.parse(body).total);
         })
