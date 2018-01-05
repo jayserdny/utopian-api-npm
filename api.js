@@ -1,9 +1,11 @@
 let request = require('request');
 let filter = require('array-filter');
+let query = require('http-build-query');
 
 const API_HOST = "https://api.utopian.io/api";
 const ENDPOINT_MODERATORS = API_HOST + '/moderators';
 const ENDPOINT_SPONSORS = API_HOST + '/sponsors';
+const ENDPOINT_POSTS = API_HOST + '/posts';
 
 let utopian = {};
 utopian.getModerators = () => {
@@ -22,7 +24,7 @@ utopian.getSponsors = () => {
         })
     });
 };
-utopian.isModerator = (username) => {
+utopian.getSponsor = (username) => {
     return new Promise((yes, no) => {
         utopian.getModerators().then((moderators) => {
             yes(filter(JSON.parse(moderators).results, (moderator) => {
@@ -35,7 +37,7 @@ utopian.isModerator = (username) => {
         });
     })
 };
-utopian.isSponsor = (username) => {
+utopian.getSponsor = (username) => {
     return new Promise((yes, no) => {
         utopian.getSponsors().then((sponsors) => {
             yes(filter(JSON.parse(sponsors).results, (sponsor) => {
@@ -48,5 +50,54 @@ utopian.isSponsor = (username) => {
         });
     })
 };
+
+utopian.getPosts = (options) => {
+
+    if (!options) options = {};
+
+    if (options.limit > 20 || options.limit < 1) {
+        options.limit = 20;
+    }
+
+    if (options.length === 0) {
+        options.limit = 20;
+        options.skip = 0;
+    }
+
+    return new Promise((yes, no) => {
+        request(ENDPOINT_POSTS + "?" + query(options), [], (err, response, body) => {
+            if (err) no(err);
+            yes(body);
+        })
+    });
+
+};
+
+utopian.getPendingPostsCount = () => {
+    return new Promise((yes, no) => {
+        request(ENDPOINT_POSTS + "?" + query({filterBy: 'review', limit: 1, skip: 0}), [], (err, response, body) => {
+            if (err) no(err);
+            yes(JSON.parse(body).total);
+        })
+    });
+};
+
+utopian.getTotalPostCount = () => {
+    return new Promise((yes, no) => {
+        request(ENDPOINT_POSTS + "?" + query({limit: 1, skip: 0}), [], (err, response, body) => {
+            if (err) no(err);
+            yes(JSON.parse(body).total);
+        })
+    });
+};
+utopian.getApprovedPostCount = () => {
+    return new Promise((yes, no) => {
+        request(ENDPOINT_POSTS + "?" + query({filterBy: 'active', limit: 1, skip: 0}), [], (err, response, body) => {
+            if (err) no(err);
+            yes(JSON.parse(body).total);
+        })
+    });
+};
+
 
 module.exports = utopian;
