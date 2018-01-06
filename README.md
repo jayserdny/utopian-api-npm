@@ -66,6 +66,59 @@ utopian.getModerator("ned").then((result) => {
 }); //returns []
 ````
 
+*Get posts for the development category:*
+
+````js
+let utopian = require('utopian-api');
+
+utopian.getPosts({
+    sortBy: 'created',
+    type: 'development'
+}).then((posts) => {
+    console.log(posts.results); //get the first 50 posts
+});
+
+utopian.getPosts({
+    sortBy: 'created',
+    type: 'development',
+    skip: 50
+}).then((posts) => {
+    console.log(posts.results); //get the next 50 posts
+});
+````
+*Limit the number of results:*
+````js
+let utopian = require('utopian-api');
+
+utopian.getPosts({
+    sortBy: 'created',
+    type: 'development',
+    limit: 5
+}).then((posts) => {
+    console.log(posts.results); //get the first 5 posts
+});
+````
+
+*Get pending posts count:*
+
+````js
+let utopian = require('utopian-api');
+
+utopian.getPendingPostsCount().then((count) => {
+    console.log("There are " + count + " pending posts.");
+})
+````
+
+*Get total posts count:*
+
+````js
+let utopian = require('utopian-api');
+
+utopian.getTotalPostsCount().then((count) => {
+    console.log("There are " + count + " posts on utopian.io. AMAZING!");
+})
+````
+
 ## Contribution
 
 If you want to contribute to this package create a fork, make your changes and create a pull request.
