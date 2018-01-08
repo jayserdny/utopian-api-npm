@@ -7,6 +7,11 @@ const ENDPOINT_MODERATORS = API_HOST + '/moderators';
 const ENDPOINT_SPONSORS = API_HOST + '/sponsors';
 const ENDPOINT_POSTS = API_HOST + '/posts';
 
+const POST_TYPE_TRANSLATIONS = "translations";
+const POST_TYPE_DEVELOPMENT = "development";
+const POST_TYPE_BUGHUNTING = "bug-hunting";
+const POST_TYPE_DOCUMENTATION = "documentation";
+
 let utopian = {};
 utopian.getModerators = () => {
     return new Promise((yes, no) => {
@@ -73,28 +78,46 @@ utopian.getPosts = (options) => {
 
 };
 
-utopian.getPendingPosts = (options) => {
-  return new Promise((yes) => {
-      utopian.getPosts(Object.assign(options, options)).then((posts) => {
-          yes(JSON.parse(posts));
-      })
-  })
+utopian.getPendingPostsByModeratorAndCategory = (moderator, category, options) => {
+    return new Promise((yes) => {
+        utopian.getPosts(Object.assign({
+            section: 'all',
+            sortBy: 'created',
+            filterBy: 'review',
+            status: 'any',
+            type: category
+        }, options)).then((posts) => {
+            yes(filter(posts.results, (post) => {
+                return post.moderator === moderator;
+            }));
+        })
+    })
 };
 
-utopian.getPendingPostsByModeratorAndCategory = (moderator, category, options) => {
-  return new Promise((yes) => {
-      utopian.getPosts(Object.assign({
-          section: 'all',
-          sortBy: 'created',
-          filterBy: 'review',
-          status: 'any',
-          type: category
-      }, options)).then((posts) => {
-          yes(filter(JSON.parse(posts).results,(post) => {
-              return post.moderator === moderator;
-          }));
-      })
-  })
+utopian.getPendingPostsByCategory = (category, options) => {
+    return new Promise((yes) => {
+        utopian.getPosts(Object.assign({
+            sortBy: 'created',
+            filterBy: 'review',
+            type: category
+        }, options)).then((posts) => {
+            yes(posts.total);
+        })
+    })
+};
+
+utopian.getPendingPosts = (options) => {
+    return new Promise((yes) => {
+        utopian.getPosts(Object.assign(
+            {
+                sortBy: 'created',
+                filterBy: 'review'
+            }, options
+        )).then((posts) => {
+            yes(posts.total);
+
+        })
+    })
 };
 
 utopian.getPendingPostsByModerator = (moderator) => {
@@ -110,7 +133,7 @@ utopian.getPendingPostsByModerator = (moderator) => {
             yes(posts);
         })
     })
-}
+};
 
 utopian.getPendingPostsCount = () => {
     return new Promise((yes, no) => {
@@ -129,6 +152,5 @@ utopian.getTotalPostCount = () => {
         })
     });
 };
-
 
 module.exports = utopian;
