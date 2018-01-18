@@ -1,6 +1,6 @@
 {
   "name": "utopian-api",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Wrapper for the Utopian.io API",
   "main": "api.js",
   "scripts": {
@@ -19,9 +19,5 @@
     "url": "https://github.com/utopian-io/utopian-api-npm/issues"
   },
   "homepage": "https://github.com/utopian-io/utopian-api-npm/#readme",
-  "dependencies": {
-    "array-filter": "^1.0.0",
-    "http-build-query": "^0.2.2",
-    "request": "^2.83.0"
-  }
+  "dependencies": {}
 }
